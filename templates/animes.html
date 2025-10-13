@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todos os Animes - OtakuList</title>
+</head>
+<body>
+<header>
+    <nav>
+        <ul>
+            <li class="logo"><a href="/"><img src="logo.otakulist.png" alt="OtakuList Logo"></a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/animes">Animes</a></li>
+            <li><a href="#">Minha Lista</a></li>
+            <li><a href="#">Entrar</a></li>
+            <li><a href="#">Cadastrar-se</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Todos os Animes</h1>
+
+<ul>
+    {% for anime in animes %}
+    <li>
+        <img src="{{ anime.coverImage.large }}" width="120" alt="Capa de {{ anime.title.romaji or anime.title.english or anime.title.native }}">
+        <h3>{{ anime.title.romaji or anime.title.english or anime.title.native }}</h3>
+        
+    </li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>
