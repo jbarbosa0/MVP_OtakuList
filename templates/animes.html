@@ -1,55 +1,64 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todos os Animes - OtakuList</title>
-    <link rel="stylesheet" href="/static/style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OtakuList — Animes</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-<header>
-    <nav>
-        <ul>
-            <li><a href="/">OtakuList</a></li>
-            <li><a href="/animes">Animes</a></li>
-            <li><a href="/minha-lista">Minha Lista</a></li>
-            <li><a href="/perfil">Perfil</a></li>
-        </ul>
-    </nav>
-</header>
+  <div class="container">
+    <header class="site-header">
+      <div class="brand">
+        <div class="logo">OT</div>
+        <h1>OtakuList</h1>
+      </div>
+      <nav class="site-nav">
+        <a href="/">Início</a>
+        <a href="/animes">Animes</a>
+        <a href="/minha-lista">Minha Lista</a>
+        <a href="/perfil">Perfil</a>
+      </nav>
+    </header>
 
-<h1>Todos os Animes</h1>
+    <div class="search-wrapper">
+      <form class="search-form" action="{{ url_for('search') }}" method="GET">
+        <input type="text" name="q" placeholder="Pesquisar anime... ex: Naruto" value="{{ request.args.get('q','') }}">
+        <button type="submit">🔍 Buscar</button>
+      </form>
+    </div>
 
-<input 
-    type="text" 
-    id="searchBar" 
-    placeholder="Pesquisar anime..."
-    style="padding: 10px; width: 60%; max-width: 400px; margin: 15px 0; font-size: 16px;">
-<br>
+    <div class="stats">
+      <div class="stat-card">Total: <strong id="stat-total">0</strong></div>
+      <div class="stat-card">Assistindo: <strong id="stat-watching">0</strong></div>
+      <div class="stat-card">Completos: <strong id="stat-completed">0</strong></div>
+      <div class="stat-card">Dropados: <strong id="stat-dropped">0</strong></div>
+    </div>
 
-<ul id="animeList">
-    {% for anime in animes %}
-    <li class="anime-item">
-        <img src="{{ anime.coverImage.large }}" width="150" 
-             alt="{{ anime.title.romaji or anime.title.english or anime.title.native }}">
-        
-        <h3 class="anime-title">
-            {{ anime.title.romaji or anime.title.english or anime.title.native }}
-        </h3>
+    <div class="section-title">Resultados</div>
+    {% if animes %}
+    <div class="grid">
+      {% for anime in animes %}
+      <article class="card">
+        <img class="thumb" src="{{ anime.coverImage.large }}" alt="{{ anime.title.romaji }}">
+        <div class="card-body">
+          <div class="card-title">{{ anime.title.romaji or anime.title.english }}</div>
+          <div class="card-desc">{{ (anime.description|striptags)[:110] }}{% if anime.description|length > 110 %}...{% endif %}</div>
+          <div class="card-meta">
+            <div class="badge">⭐ {{ anime.averageScore or '—' }}</div>
+            <button class="btn" data-id="{{ anime.id }}" data-title="{{ anime.title.romaji }}" data-cover="{{ anime.coverImage.large }}" onclick="addToListFromButton(this)">Adicionar</button>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+      <div style="padding:26px; text-align:center; color:#9fb1d9;">Nenhum resultado. Tente outro termo.</div>
+    {% endif %}
 
-        <button 
-            data-id="{{ anime.id }}" 
-            data-title="{{ anime.title.romaji or anime.title.english or anime.title.native }}" 
-            data-cover="{{ anime.coverImage.large }}"
-            onclick="addToListFromButton(this)">
-            Adicionar
-        </button>
-    </li>
-    {% endfor %}
-</ul>
+    <footer style="margin-top:22px; text-align:center; color:#9fb1d9;">© 2025 OtakuList</footer>
+  </div>
 
-<script src="/static/app.js"></script>
-<script src="/static/search.js"></script>
-
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>

@@ -1,79 +1,187 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OtakuList</title>
-    <link rel="stylesheet" href="/static/style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OtakuList — Home</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+/* ===== BODY E BACKGROUND ===== */
+body {
+    background: linear-gradient(180deg, #1b1f2b 0%, #161924 100%);
+    color: #dbe2ff;
+    font-family: Arial, sans-serif;
+}
+
+/* Botão de adicionar anime */
+.add-btn {
+    padding: 6px 12px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    background-color: #4c76ff;
+    color: #fff;
+    font-weight: bold;
+    transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+.add-btn:hover {
+    transform: scale(1.15);
+    background-color: #6180ff;
+    box-shadow: 0 6px 10px rgba(0,0,0,0.4);
+}
+.plus-icon {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Botões de navegação */
+.site-nav a {
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: #dbe2ff;
+    font-weight: 500;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.site-nav a:hover {
+    background-color: #4c76ff;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+/* Cards */
+.card {
+    background-color: #2c3147;
+    border-radius: 8px;
+    overflow: hidden;
+    color: #dbe2ff;
+}
+.card-title {
+    color: #fff;
+    font-weight: bold;
+}
+.card-desc {
+    color: #b8c1ff;
+}
+.badge {
+    background-color: #4c76ff;
+    color: #fff;
+    padding: 3px 6px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+/* Seções */
+.section-title {
+    color: #fff;
+    font-weight: bold;
+    font-size: 20px;
+    margin: 30px 20px 10px 20px;
+}
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    margin: 20px;
+}
+
+/* Banner */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+.hero-left h2 {
+    color: #fff;
+}
+.hero-left p {
+    color: #dbe2ff;
+}
+  </style>
 </head>
 <body>
-<header>
-    <nav>
-        <ul>
-            <li><a href="/">OtakuList</a></li>
-            <li><a href="/animes">Animes</a></li>
-            <li><a href="/minha-lista">Minha Lista</a></li>
-            <li><a href="/perfil">Perfil</a></li>
-        </ul>
-    </nav>
-</header>
+  <div class="container">
+    <header class="site-header">
+      <div class="brand">
+        <div class="logo">OT</div>
+        <h1>OtakuList</h1>
+      </div>
+      <nav class="site-nav">
+        <a href="/">Início</a>
+        <a href="/animes">Animes</a>
+        <a href="/minha-lista">Minha Lista</a>
+        <a href="/perfil">Perfil</a>
+      </nav>
+    </header>
 
-<section>
-    <h1>Acompanhe seus animes favoritos</h1>
-    <p>Descubra, organize e salve os que você quer assistir.</p>
-</section>
+    <section class="hero">
+      <div class="hero-left">
+        <h2>Acompanhe seus animes favoritos</h2>
+        <p>Descubra, organize e salve os animes que você quer assistir. Crie sua lista, marque status e acompanhe tudo em um só lugar.</p>
+      </div>
+      <img src="{{ url_for('static', filename='images/Banner Otaku.jpg') }}" alt="Banner Otaku">
+    </section>
 
-<h2>Populares</h2>
-<ul>
-    {% for anime in populares %}
-    <li>
-        <img src="{{ anime.coverImage.large }}" width="150">
-        <p>{{ anime.title.romaji or anime.title.english or anime.title.native }}</p>
-        <button 
-            data-id="{{ anime.id }}" 
-            data-title="{{ anime.title.romaji or anime.title.english or anime.title.native }}" 
-            data-cover="{{ anime.coverImage.large }}"
-            onclick="addToListFromButton(this)">
-            Adicionar
-        </button>
-    </li>
-    {% endfor %}
-</ul>
+    <div class="section-title">Populares</div>
+    <div class="grid">
+      {% for anime in populares %}
+      <article class="card">
+        <img class="thumb" src="{{ anime.coverImage.large }}" alt="{{ anime.title.romaji }}">
+        <div class="card-body">
+          <div class="card-title">{{ anime.title.romaji or anime.title.english or anime.title.native }}</div>
+          <div class="card-desc">{{ (anime.description|striptags)[:120] }}{% if anime.description|length > 120 %}...{% endif %}</div>
+          <div class="card-meta">
+            <div class="badge">⭐ {{ anime.averageScore or '—' }}</div>
+            <button class="add-btn" data-id="{{ anime.id }}" data-title="{{ anime.title.romaji or anime.title.english or anime.title.native }}" data-cover="{{ anime.coverImage.large }}" onclick="addToListFromButton(this)"><span class="plus-icon">+</span> Adicionar</button>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
 
-<h2>Tendência</h2>
-<ul>
-    {% for anime in trends %}
-    <li>
-        <img src="{{ anime.coverImage.large }}" width="150">
-        <p>{{ anime.title.romaji or anime.title.english or anime.title.native }}</p>
-        <button 
-            data-id="{{ anime.id }}" 
-            data-title="{{ anime.title.romaji or anime.title.english or anime.title.native }}" 
-            data-cover="{{ anime.coverImage.large }}"
-            onclick="addToListFromButton(this)">
-            Adicionar
-        </button>
-    </li>
-    {% endfor %}
-</ul>
+    <div class="section-title">Tendência</div>
+    <div class="grid">
+      {% for anime in trends %}
+      <article class="card">
+        <img class="thumb" src="{{ anime.coverImage.large }}" alt="{{ anime.title.romaji }}">
+        <div class="card-body">
+          <div class="card-title">{{ anime.title.romaji or anime.title.english }}</div>
+          <div class="card-desc">{{ (anime.description|striptags)[:110] }}{% if anime.description|length > 110 %}...{% endif %}</div>
+          <div class="card-meta">
+            <div class="badge">{{ anime.episodes or '—' }} eps</div>
+            <button class="add-btn" data-id="{{ anime.id }}" data-title="{{ anime.title.romaji or anime.title.english }}" data-cover="{{ anime.coverImage.large }}" onclick="addToListFromButton(this)"><span class="plus-icon">+</span> Adicionar</button>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
 
-<h2>Populares da Temporada</h2>
-<ul>
-    {% for anime in temporada %}
-    <li>
-        <img src="{{ anime.coverImage.large }}" width="150">
-        <p>{{ anime.title.romaji or anime.title.english or anime.title.native }}</p>
-        <button 
-            data-id="{{ anime.id }}" 
-            data-title="{{ anime.title.romaji or anime.title.english or anime.title.native }}" 
-            data-cover="{{ anime.coverImage.large }}"
-            onclick="addToListFromButton(this)">
-            Adicionar
-        </button>
-    </li>
-    {% endfor %}
-</ul>
+    <div class="section-title">Populares da Temporada</div>
+    <div class="grid">
+      {% for anime in temporada %}
+      <article class="card">
+        <img class="thumb" src="{{ anime.coverImage.large }}" alt="{{ anime.title.romaji }}">
+        <div class="card-body">
+          <div class="card-title">{{ anime.title.romaji or anime.title.english }}</div>
+          <div class="card-desc">{{ (anime.description|striptags)[:100] }}{% if anime.description|length > 100 %}...{% endif %}</div>
+          <div class="card-meta">
+            <div class="badge">{{ anime.status or '—' }}</div>
+            <button class="add-btn" data-id="{{ anime.id }}" data-title="{{ anime.title.romaji or anime.title.english }}" data-cover="{{ anime.coverImage.large }}" onclick="addToListFromButton(this)"><span class="plus-icon">+</span> Adicionar</button>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
 
-<script src="/static/app.js"></script>
+    <footer style="margin-top:28px; text-align:center; color:#9fb1d9;">© 2025 OtakuList</footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>

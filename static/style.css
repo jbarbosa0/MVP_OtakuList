@@ -1,117 +1,227 @@
-/* ======== CORES GERAIS ======== */
+/* style.css - Anime Card Grid theme */
+
+/* ====== RESET ====== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html,body { height: 100%; }
 body {
-    margin: 0;
-    background: #363636;
-    font-family: Arial, sans-serif;
-    color: #fff;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(180deg,#363636 0%, #363636 100%);
+  color: #e6eef8;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height: 1.4;
+  min-height: 100vh;
 }
 
-/* REMOVE qualquer caixa ou borda do header */
-header {
-    background: #1C1C1C;
-    padding: 0;
-    margin: 0;
-    border: none;
-    box-shadow: none;
+/* ====== LAYOUT ====== */
+.container {
+  width: 94%;
+  max-width: 1120px;
+  margin: 28px auto;
 }
 
-/* ===== NAV BAR ===== */
-nav {
-    width: 100%;
-    background: #1C1C1C !important;
-    padding: 15px 30px;
+/* ====== HEADER / NAV ====== */
+.site-header {
+  background: #1C1C1C;
+  border: 1px solid rgba(255,255,255,0.03);
+  padding: 10px 16px;
+  border-radius: 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+}
+.brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.logo {
+  width:46px;
+  height:46px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  letter-spacing:0.6px;
+  color: white;
+  background: linear-gradient(135deg,#7c3aed,#3b82f6);
+  box-shadow: 0 6px 18px rgba(59,130,246,0.08);
+}
+.brand h1 {
+  font-size:18px;
+  font-weight:700;
+}
+.site-nav {
+  display:flex;
+  gap:14px;
+}
+.site-nav a {
+  color: #c6d0e8;
+  text-decoration:none;
+  font-weight:600;
+  padding:6px 10px;
+  border-radius:8px;
+}
+.site-nav a:hover { color: white; background: rgba(255,255,255,0.02); }
 
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-
-    border-radius: 0 !important;
-    margin: 0;
-    border: none !important;
-    box-shadow: none !important;
+/* ====== HERO / BANNER ====== */
+.hero {
+  margin-top: 18px;
+  background: linear-gradient(90deg, rgba(124,58,237,0.08), rgba(59,130,246,0.04));
+  border-radius: 12px;
+  padding: 20px;
+  display:flex;
+  gap: 18px;
+  align-items:center;
+  justify-content:space-between;
+}
+.hero .hero-left {
+  max-width: 64%;
+}
+.hero h2 {
+  font-size: 28px;
+  margin-bottom:8px;
+}
+.hero p { color: #b8c6dd; margin-bottom:10px; }
+.hero img {
+  width:220px;
+  height:120px;
+  object-fit:cover;
+  border-radius:10px;
+  box-shadow: 0 10px 26px rgba(2,6,23,0.6);
 }
 
-/* Remove QUALQUER estilo herdado do UL */
-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-
-    margin: 0;
-    padding: 0;
-
-    background: none;
-    border-radius: 0;
+/* ====== SEARCH BAR (SOMENTE EM /animes) ====== */
+.search-wrapper {
+  margin-top: 14px;
+  display:flex;
+  justify-content:center;
+}
+.search-form {
+  display:flex;
+  gap:8px;
+  align-items:center;
+  background: rgba(255,255,255,0.03);
+  padding:8px;
+  border-radius:12px;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+.search-form input[type="text"]{
+  padding:10px 12px;
+  border-radius:8px;
+  border: none;
+  background: transparent;
+  color: #e6eef8;
+  width:360px;
+  max-width:60vw;
+  outline:none;
+}
+.search-form button{
+  background: linear-gradient(135deg,#7c3aed,#3b82f6);
+  border:none;
+  padding:10px 14px;
+  border-radius:8px;
+  color:white;
+  font-weight:700;
+  cursor:pointer;
 }
 
-/* Links simples */
-nav ul li a {
-    text-decoration: none;
-    color: white;
-    font-weight: 500;
-    font-size: 16px;
-
-    padding: 0;
-    margin: 0;
-
-    background: none !important;
-    border: none !important;
-    border-radius: 0 !important;
+/* ====== STATS ROW ====== */
+.stats {
+  display:flex;
+  gap:12px;
+  margin-top:16px;
+  flex-wrap:wrap;
+}
+.stat-card {
+  background: rgba(255,255,255,0.02);
+  padding:10px 12px;
+  border-radius:10px;
+  color:#cbd7ee;
+  font-weight:600;
 }
 
-nav ul li a:hover {
-    color: #b8b8ff;
+/* ====== GRID CARDS ====== */
+.section-title {
+  margin-top:22px;
+  margin-bottom:8px;
+  font-size:18px;
+  font-weight:700;
 }
-/* ======== HERO (CAPA) ======== */
-section {
-    width: 100%;
-    height: 380px; /* ajuste como quiser: 320, 380, 450… */
-    
-    background-image: url("/static/img/capa.anime3.jpg");
-    background-size: cover;      /* preenche sem deformar */
-    background-position: center; /* foca no meio da imagem */
-    background-repeat: no-repeat;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    padding-left: 40px;
-
-    color: white;
+.grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px,1fr));
+  gap:16px;
+  margin-top:10px;
 }
-
-
-section h1 {
-    font-size: 34px;
-    font-weight: 700;
-    max-width: 600px;
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow: 0 8px 22px rgba(2,6,23,0.6);
+  display:flex;
+  flex-direction:column;
+  transition: transform .18s ease, box-shadow .18s ease;
 }
-
-section p {
-    font-size: 18px;
-    max-width: 600px;
-    margin-top: -10px;
+.card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(2,6,23,0.75); }
+.card .thumb {
+  width:100%;
+  height: 240px;
+  object-fit:cover;
+  display:block;
 }
-
-/* ======== TITULOS ======== */
-h2 {
-    margin: 30px 20px 10px 20px;
-}
-
-/* ======== LISTA DE ANIMES ======== */
-ul {
-    padding: 0;
-    margin: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 25px;
+.card-body { padding:12px; display:flex; flex-direction:column; gap:6px; min-height:120px; }
+.card-title { font-weight:800; font-size:14px; color:#fff; }
+.card-desc { color:#9fb1d9; font-size:13px; line-height:1.2; }
+.card-meta { margin-top:auto; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.badge { background: rgba(255,255,255,0.03); padding:6px 8px; border-radius:8px; color:#c6d6f0; font-weight:700; font-size:13px; }
+.btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  padding:8px 10px;
+  border-radius:8px;
+  color: #e6eef8;
+  text-decoration:none;
+  cursor:pointer;
 }
 
-ul li {
-    list-style: none;
-    background: #2e2e2e;
-    padding: 15px;
-    border-radius: 8px;
-    width: 160px;
+/* ====== MINHA LISTA ====== */
+.list-row { display:flex; flex-direction:column; gap:10px; margin-top:16px; }
+.list-item {
+  display:flex;
+  gap:12px;
+  align-items:center;
+  background: rgba(255,255,255,0.02);
+  padding:10px;
+  border-radius:10px;
+}
+.list-item img { width:84px; height:84px; object-fit:cover; border-radius:8px; }
+
+/* ====== PROFILE ====== */
+.profile {
+  display:flex;
+  gap:18px;
+  align-items:center;
+  margin-top:12px;
+}
+.avatar {
+  width:120px;
+  height:120px;
+  border-radius:14px;
+  object-fit:cover;
+  border: 4px solid rgba(255,255,255,0.03);
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width:900px){
+  .hero { flex-direction:column; align-items:flex-start; gap:12px; }
+  .card .thumb { height: 180px; }
+  .avatar { width:92px; height:92px; }
+}
+@media (max-width:520px){
+  .search-form input[type="text"] { width: 60vw; }
+  .card .thumb { height: 140px; }
+  .brand h1 { font-size:16px; }
 }
