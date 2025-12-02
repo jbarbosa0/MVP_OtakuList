@@ -6,7 +6,7 @@ import os
 NOME_DB = 'otaku_list.db' 
 STATUS_VALIDOS = ("Assistindo", "Concluído", "Planejo Assistir", "Abandonado", "Pausado") 
 
-# --- 1. SETUP: CRIAÇÃO DE TABELAS ---
+
 def criar_tabelas_otaku_list():
     """Cria o arquivo DB e todas as tabelas (Se não existirem)."""
     conn = None
@@ -15,7 +15,7 @@ def criar_tabelas_otaku_list():
         cursor = conn.cursor()
         cursor.execute("PRAGMA foreign_keys = ON;") 
 
-        # Tabela 1: Usuario
+        
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS Usuario (
                 idUsuario INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -26,7 +26,7 @@ def criar_tabelas_otaku_list():
             );
         """)
 
-        # Tabela 2: Anime
+        
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS Anime (
                 idAnime INTEGER PRIMARY KEY,
@@ -38,7 +38,7 @@ def criar_tabelas_otaku_list():
             );
         """)
 
-        # Tabela 3: ListaUsuario (Relacionamento N:N com status pessoal)
+        
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS ListaUsuario (
                 idUsuario INTEGER NOT NULL,
@@ -52,7 +52,7 @@ def criar_tabelas_otaku_list():
             );
         """)
 
-        # Tabela 4: Avaliacao
+        
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS Avaliacao (
                 idAvaliacao INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -74,7 +74,7 @@ def criar_tabelas_otaku_list():
             conn.close()
 
 
-# --- 2. SEGURANÇA E AUTENTICAÇÃO (RF 02, RF 01) ---
+
 
 def criptografar_senha(senha):
     """Retorna o hash SHA-256 da senha."""
@@ -92,25 +92,25 @@ def cadastrar_usuario(nome, email, senha):
             INSERT INTO Usuario (nome, email, senha, dataCadastro)
             VALUES (?, ?, ?, ?)
         """
-        # 💡 MENSAGEM DE SUCESSO NO TERMINAL (1)
+        
         print(f"\n[BD] Tentando cadastrar: {email}") 
         
         cursor.execute(sql_insert, (nome, email, senha_criptografada, data_cadastro))
         
-        conn.commit()  # <-- Salvando a transação!
+        conn.commit()  
         
         id_criado = cursor.lastrowid
-        # 💡 MENSAGEM DE CONFIRMAÇÃO FINAL (2)
+        
         print(f"[BD] USUÁRIO CADASTRADO com ID: {id_criado}")
         
         return id_criado
 
     except sqlite3.IntegrityError:
-        # Se o email já existir (UNIQUE)
+        
         print(f"[BD] ERRO INTEGRIDADE: Email {email} já existe.")
         return None
     except Exception as e:
-        # Erro geral (para pegar qualquer erro não mapeado)
+        
         print(f"[BD] ERRO FATAL ao cadastrar: {e}") 
         return None
     finally:
@@ -140,7 +140,7 @@ def fazer_login(email, senha):
         if conn: conn.close()
 
 
-# --- 3. GERENCIAMENTO DE LISTAS (RF 04, RF 06, RF 07) ---
+
 
 def adicionar_metadados_anime(id_anime, titulo, genero, ano, plataforma, sinopse):
     """Insere dados básicos de um anime na tabela 'Anime'."""
@@ -236,16 +236,13 @@ def excluir_anime_lista(id_usuario, id_anime):
     finally:
         if conn: conn.close()
 
-# --- DEMONSTRAÇÃO E TESTES ---
-# Remova esta função do seu db_crud.py quando for para Produção.
+
 def demonstrar_integracao():
-    criar_tabelas_otaku_list() # Garante a estrutura
-    # ... (restante da lógica de demonstração/teste) ...
+    criar_tabelas_otaku_list() 
+    
 
 if __name__ == '__main__':
-    # Esta é a única linha que deve estar aqui para testes. 
-    # Mantenha-a como está para testar o db_crud.py diretamente.
-    # demonstrar_integracao() # Descomente para rodar testes manuais do DB
+
     pass
 
 def atualizar_perfil_usuario(id_usuario, novo_nome):
