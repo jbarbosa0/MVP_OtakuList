@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil - OtakuList</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
-
 <nav>
     <ul>
         <li><a href="{{ url_for('homepage') }}">Início</a></li>
@@ -26,10 +16,24 @@
 
 <h1>Perfil</h1>
 
-<div>
+<link rel="stylesheet" href="/static/style.css">
+
+<div class="perfil-info">
     <img id="user-avatar" src="/static/img/avatar.jpg" width="100" alt="Avatar">
-    <h2 id="user-name">Carregando...</h2>
-    <p id="user-username"></p>
+    
+    <h2 id="user-name">{{ usuario.nome or usuario.email }}</h2> 
+    
+    <p>Email: {{ usuario.email }}</p>
+</div>
+
+<div class="edicao-container">
+    <h3>Editar Nome do Perfil</h3>
+    <form id="formEdicaoNome">
+        <label for="novo_nome">Novo Nome:</label>
+        <input type="text" id="novo_nome" name="novo_nome" value="{{ usuario.nome or '' }}" required>
+        <button type="submit">Salvar Nome</button>
+    </form>
+    <p id="msg-edicao" class="error"></p>
 </div>
 
 <div>
@@ -42,7 +46,49 @@
 
 <script src="/static/app.js"></script>
 <script>
-    displayStats( );
+    // Você precisará de um arquivo JS separado para lidar com a submissão do formulário de edição.
+    // displayStats( ); // Mantenha a chamada original.
+
+    // --- Lógica de Edição de Perfil ---
+    const formEdicao = document.getElementById('formEdicaoNome');
+    const msgEdicao = document.getElementById('msg-edicao');
+    const userNameElement = document.getElementById('user-name');
+
+    formEdicao.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const novoNome = document.getElementById('novo_nome').value;
+        msgEdicao.textContent = '';
+        
+        try {
+            const response = await fetch('/api/perfil/atualizar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                // Envia o novo nome como JSON para a rota no routes.py
+                body: JSON.stringify({ nome: novoNome })
+            });
+            
+            const data = await response.json();
+
+            if (data.success) {
+                // Atualiza a interface (Frontend)
+                userNameElement.textContent = data.novo_nome;
+                msgEdicao.textContent = '✅ Perfil atualizado!';
+                // Recarrega a página para atualizar a sessão do Flask (Melhor prática)
+                window.location.reload(); 
+            } else {
+                msgEdicao.textContent = `❌ Erro: ${data.message}`;
+            }
+
+        } catch (error) {
+            msgEdicao.textContent = '❌ Erro de comunicação com o servidor.';
+        }
+    });
+
 </script>
+
+
 </body>
 </html>

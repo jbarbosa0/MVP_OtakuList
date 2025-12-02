@@ -26,9 +26,10 @@
 <h1>Perfil</h1>
 
 <div>
-    <img src="/static/img/avatar.jpg" width="100" alt="Avatar">
+    <img id="user-avatar" src="/static/img/avatar.jpg" width="100" alt="Avatar">
+    
     <h2>Perfil</h2>
-    <p>@fulanodetal</p>
+    <p>@{{ usuario.nome or usuario.email }}</p>
 </div>
 
 <h1>Minha Lista</h1>
